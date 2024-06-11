@@ -2,3 +2,4 @@ requests
 bs4
 matplotlib.pyplot
 collections
+streamlit
