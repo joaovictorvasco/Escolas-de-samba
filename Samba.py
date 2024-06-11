@@ -1,6 +1,7 @@
 # Carregue as bibliotecas
 import pandas as pd
 import matplotlib.pyplot as plt
+import streamlit as st
 
 # Carregar os dados do CSV
 df = pd.read_csv(carnival_champions.csv)
