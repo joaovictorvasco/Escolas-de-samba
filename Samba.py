@@ -2,11 +2,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# URL do arquivo CSV no GitHub
-url = 'https://raw.githubusercontent.com/seu-usuario/carnival_champions/main/carnival_champions.csv'
-
 # Carregar os dados do CSV
-df = pd.read_csv(url)
+df = pd.read_csv(carnival_champions.csv)
 
 # Plotar os dados
 plt.figure(figsize=(10, 6))
