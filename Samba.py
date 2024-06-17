@@ -13,12 +13,17 @@ st.write("Colunas disponíveis na tabela:")
 st.write(df.columns)
 st.write(df.head())
 
-# Selecionar e renomear as colunas
+# Selecionar e renomear as colunas corretas
+# Ajustar a leitura conforme a estrutura real da tabela
 try:
-    df = df[['Ano', 'Escola', 'Enredo']]
-    df = df.rename(columns={'Ano': 'Ano', 'Escola': 'Escola de Samba', 'Enredo': 'Enredo'})
+    df = df[['Lista de campeãs do carnaval do Rio de Janeiro', 'Lista de campeãs do carnaval do Rio de Janeiro.1', 'Lista de campeãs do carnaval do Rio de Janeiro.2']]
+    df = df.rename(columns={
+        'Lista de campeãs do carnaval do Rio de Janeiro': 'Ano',
+        'Lista de campeãs do carnaval do Rio de Janeiro.1': 'Escola de Samba',
+        'Lista de campeãs do carnaval do Rio de Janeiro.2': 'Enredo'
+    })
 except KeyError:
-    st.error("As colunas 'Ano', 'Escola' e 'Enredo' não foram encontradas na tabela. Verifique os nomes das colunas.")
+    st.error("As colunas 'Ano', 'Escola de Samba' e 'Enredo' não foram encontradas na tabela. Verifique os nomes das colunas.")
 
 # Converter a coluna 'Ano' para inteiro
 df['Ano'] = pd.to_numeric(df['Ano'], errors='coerce').dropna().astype(int)
