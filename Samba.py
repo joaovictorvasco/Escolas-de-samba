@@ -8,18 +8,17 @@ url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%A3s_do_carnaval_do_Rio_de
 dfs = pd.read_html(url)
 df = dfs[0]  # Assumindo que a primeira tabela é a correta
 
-# Inspecionar as colunas para garantir que estamos pegando as corretas
+# Exibir as colunas disponíveis para inspecionar
 st.write("Colunas disponíveis na tabela:")
 st.write(df.columns)
+st.write(df.head())
 
-# Tentar selecionar as colunas corretas
+# Selecionar e renomear as colunas
 try:
     df = df[['Ano', 'Escola', 'Enredo']]
+    df = df.rename(columns={'Ano': 'Ano', 'Escola': 'Escola de Samba', 'Enredo': 'Enredo'})
 except KeyError:
     st.error("As colunas 'Ano', 'Escola' e 'Enredo' não foram encontradas na tabela. Verifique os nomes das colunas.")
-
-# Renomear as colunas para padronizar os nomes
-df = df.rename(columns={'Ano': 'Ano', 'Escola': 'Escola de Samba', 'Enredo': 'Enredo'})
 
 # Converter a coluna 'Ano' para inteiro
 df['Ano'] = pd.to_numeric(df['Ano'], errors='coerce').dropna().astype(int)
