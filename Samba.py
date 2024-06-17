@@ -11,9 +11,10 @@ df = df.drop(columns=['#', 'Escola de samba', 'Escola de samba.1']).rename(colum
 st.header('As maiores campeãs do carnaval carioca')
 
 st.write(df)
-
-fig, ax = plt.subplots()
-ax.bar(df['Títulos'], df['Escola de Samba'])
+ax.bar(df['Escola de Samba'], df['Títulos'])
+ax.set_xlabel('Escola de Samba')
+ax.set_ylabel('Títulos')
+ax.set_xticklabels(df['Escola de Samba'], rotation=45)
 
 st.pyplot(fig)
 
