@@ -1,15 +1,6 @@
-# Carregue as bibliotecas
 import pandas as pd
-import matplotlib.pyplot as plt
-import streamlit as st
+df = pd.read_html(url, match='Títulos')[1]
+df = df.drop(columns=['#', 'Escola de samba', 'Escola de samba.1']).rename(columns={'Escola de samba.2': 'Escola de Samba'})
 
-# Carregar os dados do CSV
-df = pd.read_csv(carnival_champions.csv)
-
-# Plotar os dados
-plt.figure(figsize=(10, 6))
-plt.barh(df['Escola de Samba'], df['Número de Títulos'], color='skyblue')
-plt.xlabel('Número de Títulos')
-plt.ylabel('Escola de Samba')
-plt.title('Número de Títulos das Escolas de Samba (Últimos 24 Anos)')
-plt.show()
+import seaborn as sns
+sns.barplot(data=df, x='Títulos', y='Escola de Samba')
