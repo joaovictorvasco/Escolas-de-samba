@@ -13,7 +13,7 @@ st.header('As maiores campeãs do carnaval carioca')
 st.write(df)
 
 fig, ax = plt.subplots()
-ax.plot(df['Títulos'], df['Escola de Samba'])
+ax.bar(df['Títulos'], df['Escola de Samba'])
 
 st.pyplot(fig)
 
