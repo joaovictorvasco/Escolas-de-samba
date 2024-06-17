@@ -11,6 +11,7 @@ df = df.drop(columns=['#', 'Escola de samba', 'Escola de samba.1']).rename(colum
 st.header('As maiores campeãs do carnaval carioca')
 
 st.write(df)
+fig, ax = plt.subplots()
 ax.bar(df['Escola de Samba'], df['Títulos'])
 ax.set_xlabel('Escola de Samba')
 ax.set_ylabel('Títulos')
