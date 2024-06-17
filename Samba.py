@@ -36,3 +36,4 @@ ax.set_ylabel('Títulos')
 ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
 
 st.pyplot(fig)
+
