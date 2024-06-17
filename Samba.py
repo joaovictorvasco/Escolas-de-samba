@@ -13,6 +13,6 @@ st.header('As maiores campeãs do carnaval carioca')
 st.write(df)
 
 grafico = plt.plot(df['Títulos'], df['Escola de Samba'])
-st.write(grafico)
+st.pyplot(grafico)
 
 
