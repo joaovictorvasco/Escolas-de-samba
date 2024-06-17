@@ -16,57 +16,56 @@ df_list = pd.read_html(url)
 table_info = []
 for i, table in enumerate(df_list):
     if isinstance(table, pd.DataFrame):
-        table_info.append(f"Table {i}: Columns: {', '.join(table.columns)}")
+        columns = table.columns
+        if all(isinstance(column, str) for column in columns):
+            table_info.append(f"Table {i}: Columns: {', '.join(columns)}")
 
 st.write("Tables and their columns found on the Wikipedia page:")
 for info in table_info:
     st.write(info)
 
-# Assuming the correct table with columns 'Ano' and 'Escola de samba' is at index 0 (please adjust if different)
-# Verify if columns 'Ano' and 'Escola de samba' exist in the table
-for i, table in enumerate(df_list):
-    if 'Ano' in table.columns or 'Escola de samba' in table.columns:
-        df = table
-        break
+# Manually select the correct table based on the displayed information
+# Assuming the second table is the correct one, as an example
+df = df_list[0]
 
-if df is None:
-    st.error("The expected table with 'Ano' or 'Escola de samba' column was not found in the webpage.")
-else:
-    # Clean and transform data
-    if 'Ano' in df.columns:
-        df = df.rename(columns={'Ano': 'Ano', df.columns[1]: 'Escola de Samba'})
-    else:
-        df = df.rename(columns={df.columns[0]: 'Ano', df.columns[1]: 'Escola de Samba'})
+# Clean and transform data
+if '#' in df.columns:
+    df = df.drop(columns=['#'])
 
-    # Ensure 'Ano' is treated as integer
-    df['Ano'] = df['Ano'].astype(int)
+# Renaming columns to standardize
+df.columns = ['Ano', 'Escola de Samba'] + list(df.columns[2:])
+df = df[['Ano', 'Escola de Samba']]  # Keeping only relevant columns
 
-    # Streamlit header
-    st.header('As maiores campeãs do carnaval carioca')
+# Ensure 'Ano' is treated as integer
+df['Ano'] = df['Ano'].astype(int)
 
-    # Slider for selecting year range
-    min_year = int(df['Ano'].min())
-    max_year = int(df['Ano'].max())
-    selected_years = st.slider('Selecione o intervalo de anos:', min_year, max_year, (min_year, max_year))
+# Streamlit header
+st.header('As maiores campeãs do carnaval carioca')
 
-    # Filter the DataFrame based on the selected year range
-    filtered_df = df[(df['Ano'] >= selected_years[0]) & (df['Ano'] <= selected_years[1])]
+# Slider for selecting year range
+min_year = int(df['Ano'].min())
+max_year = int(df['Ano'].max())
+selected_years = st.slider('Selecione o intervalo de anos:', min_year, max_year, (min_year, max_year))
 
-    # Aggregate titles by school within the selected year range
-    aggregated_df = filtered_df['Escola de Samba'].value_counts().reset_index()
-    aggregated_df.columns = ['Escola de Samba', 'Títulos']
+# Filter the DataFrame based on the selected year range
+filtered_df = df[(df['Ano'] >= selected_years[0]) & (df['Ano'] <= selected_years[1])]
 
-    # Display the filtered DataFrame
-    st.write(aggregated_df)
+# Aggregate titles by school within the selected year range
+aggregated_df = filtered_df['Escola de Samba'].value_counts().reset_index()
+aggregated_df.columns = ['Escola de Samba', 'Títulos']
 
-    # Create and display the bar chart
-    fig, ax = plt.subplots()
-    ax.bar(aggregated_df['Escola de Samba'], aggregated_df['Títulos'])
-    ax.set_xlabel('Escola de Samba')
-    ax.set_ylabel('Títulos')
-    ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
+# Display the filtered DataFrame
+st.write(aggregated_df)
 
-    st.pyplot(fig)
+# Create and display the bar chart
+fig, ax = plt.subplots()
+ax.bar(aggregated_df['Escola de Samba'], aggregated_df['Títulos'])
+ax.set_xlabel('Escola de Samba')
+ax.set_ylabel('Títulos')
+ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
+
+st.pyplot(fig)
+
 
 
 
