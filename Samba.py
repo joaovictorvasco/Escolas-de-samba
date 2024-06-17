@@ -15,7 +15,7 @@ fig, ax = plt.subplots()
 ax.bar(df['Escola de Samba'], df['Títulos'])
 ax.set_xlabel('Escola de Samba')
 ax.set_ylabel('Títulos')
-ax.set_xticklabels(df['Escola de Samba'], rotation=45)
+ax.set_xticklabels(df['Escola de Samba'], rotation=90)
 
 st.pyplot(fig)
 
