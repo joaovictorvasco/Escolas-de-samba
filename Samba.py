@@ -12,47 +12,50 @@ except ImportError:
 url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%A3s_do_carnaval_do_Rio_de_Janeiro'
 df_list = pd.read_html(url)
 
-# Finding the correct table based on headers
-df = None
-for table in df_list:
-    if 'Período' in table.columns:
-        df = table
-        break
+# Display all tables and their columns to understand the structure
+table_info = []
+for i, table in enumerate(df_list):
+    table_info.append(f"Table {i}: Columns: {', '.join(table.columns)}")
 
-if df is None:
-    st.error("The expected table with 'Período' column was not found in the webpage.")
-else:
-    # Clean and transform data
-    if '#' in df.columns:
-        df = df.drop(columns=['#'])
-    
-    df.columns = ['Escola de Samba', 'Período', 'Títulos']
-    df['Período'] = df['Período'].str.split('-').str[0].astype(int)
+st.write("Tables and their columns found on the Wikipedia page:")
+for info in table_info:
+    st.write(info)
 
-    # Streamlit header
-    st.header('As maiores campeãs do carnaval carioca')
+# Assuming the table with columns 'Ano' and 'Escola de samba' is at index 0 (please adjust if different)
+df = df_list[0]
 
-    # Slider for selecting year range
-    min_year = int(df['Período'].min())
-    max_year = int(df['Período'].max())
-    selected_years = st.slider('Selecione o intervalo de anos:', min_year, max_year, (min_year, max_year))
+# Clean and transform data
+df = df.rename(columns={df.columns[0]: 'Ano', df.columns[1]: 'Escola de Samba'})
 
-    # Filter the DataFrame based on the selected year range
-    filtered_df = df[(df['Período'] >= selected_years[0]) & (df['Período'] <= selected_years[1])]
+# Ensure 'Ano' is treated as integer
+df['Ano'] = df['Ano'].astype(int)
 
-    # Aggregate titles by school within the selected year range
-    aggregated_df = filtered_df.groupby('Escola de Samba')['Títulos'].sum().reset_index()
+# Streamlit header
+st.header('As maiores campeãs do carnaval carioca')
 
-    # Display the filtered DataFrame
-    st.write(aggregated_df)
+# Slider for selecting year range
+min_year = int(df['Ano'].min())
+max_year = int(df['Ano'].max())
+selected_years = st.slider('Selecione o intervalo de anos:', min_year, max_year, (min_year, max_year))
 
-    # Create and display the bar chart
-    fig, ax = plt.subplots()
-    ax.bar(aggregated_df['Escola de Samba'], aggregated_df['Títulos'])
-    ax.set_xlabel('Escola de Samba')
-    ax.set_ylabel('Títulos')
-    ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
+# Filter the DataFrame based on the selected year range
+filtered_df = df[(df['Ano'] >= selected_years[0]) & (df['Ano'] <= selected_years[1])]
 
-    st.pyplot(fig)
+# Aggregate titles by school within the selected year range
+aggregated_df = filtered_df['Escola de Samba'].value_counts().reset_index()
+aggregated_df.columns = ['Escola de Samba', 'Títulos']
+
+# Display the filtered DataFrame
+st.write(aggregated_df)
+
+# Create and display the bar chart
+fig, ax = plt.subplots()
+ax.bar(aggregated_df['Escola de Samba'], aggregated_df['Títulos'])
+ax.set_xlabel('Escola de Samba')
+ax.set_ylabel('Títulos')
+ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
+
+st.pyplot(fig)
+
 
 
