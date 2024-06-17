@@ -3,11 +3,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Ensure html5lib is installed
-import html5lib
+try:
+    import html5lib
+except ImportError:
+    st.error("Please install html5lib by running `pip install html5lib`")
 
 # Load data from Wikipedia
 url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%A3s_do_carnaval_do_Rio_de_Janeiro'
-df = pd.read_html(url, match='Período')[1]
+df_list = pd.read_html(url)
+
+# Finding the correct table based on headers
+for df in df_list:
+    if 'Período' in df.columns:
+        df = df
+        break
 
 # Clean and transform data
 df = df.drop(columns=['#'])
@@ -39,3 +48,4 @@ ax.set_ylabel('Títulos')
 ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
 
 st.pyplot(fig)
+
