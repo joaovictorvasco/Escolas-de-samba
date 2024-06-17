@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%A3s_do_carnaval_do_Rio_de_Janeiro'
+url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%B5es_do_carnaval_do_Rio_de_Janeiro'
 
 # Carregar a tabela correta da página da Wikipedia
 df = pd.read_html(url, match='Títulos')[1]
@@ -18,7 +18,11 @@ for _, row in df.iterrows():
     escola = row['Escola de Samba']
     anos = row['Anos'].split(',')
     for ano in anos:
-        expanded_data.append([int(ano.strip()), escola])
+        try:
+            expanded_data.append([int(ano.strip()), escola])
+        except ValueError:
+            # Ignore valores que não podem ser convertidos para inteiro
+            pass
 
 # Criar o DataFrame expandido
 df_expanded = pd.DataFrame(expanded_data, columns=['Ano', 'Escola de Samba'])
@@ -49,3 +53,4 @@ ax.set_ylabel('Títulos')
 ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
 
 st.pyplot(fig)
+
