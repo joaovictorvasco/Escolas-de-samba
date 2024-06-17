@@ -12,8 +12,9 @@ st.header('As maiores campeãs do carnaval carioca')
 
 st.write(df)
 
-# grafico = plt.plot(df['Títulos'], df['Escola de Samba'])
-grafico = sns.barplot(data=df, x='Títulos', y='Escola de Samba')
-st.pyplot(grafico)
+fig, ax = plt.subplots()
+ax.plot(df['Títulos'], df['Escola de Samba'])
+
+st.pyplot(fig)
 
 
