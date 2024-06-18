@@ -35,6 +35,10 @@ df_expanded = pd.DataFrame(expanded_data, columns=['Ano', 'Escola de Samba'])
 all_years = pd.DataFrame({'Ano': list(range(1932, 2025))})
 df_expanded = pd.merge(all_years, df_expanded, on='Ano', how='left')
 
+# Exibir os dados expandidos para garantir que estão corretos
+st.write("Dados expandidos:")
+st.write(df_expanded)
+
 # Cabeçalho do Streamlit
 st.header('As maiores campeãs do carnaval carioca')
 
@@ -72,3 +76,4 @@ champion_df = df_expanded[df_expanded['Ano'] == selected_year]
 # Exibir a escola campeã do ano selecionado
 st.write(f"A escola campeã no ano {selected_year} foi:")
 st.write(champion_df)
+
