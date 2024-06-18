@@ -5,10 +5,22 @@ import matplotlib.pyplot as plt
 url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%A3s_do_carnaval_do_Rio_de_Janeiro'
 
 # Carregar a tabela correta da página da Wikipedia
+dfs = pd.read_html(url)
+# Inspecionar todas as tabelas para encontrar a correta
+for i, df in enumerate(dfs):
+    st.write(f"Tabela {i}")
+    st.write(df.head())
+
+# Baseado na inspeção, carregar a tabela correta
+# Vamos assumir que a tabela correta é a que contém a coluna 'Títulos'
 df = pd.read_html(url, match='Títulos')[1]
 
 # Limpar e transformar os dados
 df = df.drop(columns=['#', 'Escola de samba', 'Escola de samba.1']).rename(columns={'Escola de samba.2': 'Escola de Samba'})
+
+# Mostrar as primeiras linhas para garantir que a tabela está correta
+st.write("Dados após limpeza e renomeação:")
+st.write(df.head())
 
 # Criar um DataFrame com colunas 'Ano' e 'Escola de Samba'
 expanded_data = []
@@ -28,7 +40,7 @@ for _, row in df.iterrows():
 df_expanded = pd.DataFrame(expanded_data, columns=['Ano', 'Escola de Samba'])
 
 # Garantir que todos os anos de 1932 a 2024 estejam representados
-all_years = pd.DataFrame({'Ano': list(range(1932, 2024))})
+all_years = pd.DataFrame({'Ano': list(range(1932, 2025))})
 df_expanded = pd.merge(all_years, df_expanded, on='Ano', how='left')
 
 # Cabeçalho do Streamlit
