@@ -55,7 +55,8 @@ ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
 st.pyplot(fig)
 
 # Seletor de ano específico
-selected_year = st.selectbox('Selecione um ano específico:', df_expanded['Ano'].unique())
+sorted_years = df_expanded['Ano'].sort_values().unique()
+selected_year = st.selectbox('Selecione um ano específico:', sorted_years)
 
 # Filtrar o DataFrame para o ano selecionado
 champion_df = df_expanded[df_expanded['Ano'] == selected_year]
@@ -63,6 +64,3 @@ champion_df = df_expanded[df_expanded['Ano'] == selected_year]
 # Exibir a escola campeã do ano selecionado
 st.write(f"A escola campeã no ano {selected_year} foi:")
 st.write(champion_df)
-
-
-
