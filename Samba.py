@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%B5es_do_carnaval_do_Rio_de_Janeiro'
+url = 'https://pt.wikipedia.org/wiki/Lista_de_campe%C3%A3s_do_carnaval_do_Rio_de_Janeiro'
 
 # Carregar a tabela correta da página da Wikipedia
 df = pd.read_html(url, match='Títulos')[1]
@@ -53,5 +53,16 @@ ax.set_ylabel('Títulos')
 ax.set_xticklabels(aggregated_df['Escola de Samba'], rotation=90)
 
 st.pyplot(fig)
+
+# Seletor de ano específico
+selected_year = st.selectbox('Selecione um ano específico:', df_expanded['Ano'].unique())
+
+# Filtrar o DataFrame para o ano selecionado
+champion_df = df_expanded[df_expanded['Ano'] == selected_year]
+
+# Exibir a escola campeã do ano selecionado
+st.write(f"A escola campeã no ano {selected_year} foi:")
+st.write(champion_df)
+
 
 
