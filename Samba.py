@@ -27,6 +27,10 @@ for _, row in df.iterrows():
 # Criar o DataFrame expandido
 df_expanded = pd.DataFrame(expanded_data, columns=['Ano', 'Escola de Samba'])
 
+# Garantir que todos os anos de 1932 a 2024 estejam representados
+all_years = pd.DataFrame({'Ano': list(range(1932, 2024))})
+df_expanded = pd.merge(all_years, df_expanded, on='Ano', how='left')
+
 # Cabeçalho do Streamlit
 st.header('As maiores campeãs do carnaval carioca')
 
